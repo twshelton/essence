@@ -1,0 +1,4 @@
+%{
+  "jason": {:hex, :jason, "1.1.1", "d3ccb840dfb06f2f90a6d335b536dd074db748b3e7f5b11ab61d239506585eb2", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
+  "rustler": {:git, "https://github.com/hansihe/rustler.git", "9a91b939aa64c3d129696c81ae2752716a152de4", [sparse: "rustler_mix"]},
+}

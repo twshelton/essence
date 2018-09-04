@@ -1,0 +1,17 @@
+[package]
+name = "wallet"
+version = "0.1.0"
+authors = []
+
+[lib]
+name = "wallet"
+path = "src/lib.rs"
+crate-type = ["dylib"]
+
+[dependencies]
+rustler = "0.18.0"
+rustler_codegen = "0.18.0"
+lazy_static = "1.0"
+libc = "0.2"
+indy = { path = "/home/ubuntu/essence/native/libindy" }
+serde_json = "1.0"
