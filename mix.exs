@@ -28,17 +28,8 @@ defmodule Essence.Mixfile do
     ]
   end
   defp rustler_crates do
-    [libindy: [
-        path: "native/libindy",
-        mode: rustc_mode(Mix.env)],
-     essence: [
+     [essence: [
         path: "native/essence",
-        mode: rustc_mode(Mix.env)],
-     wallet: [
-        path: "native/wallet",
-        mode: rustc_mode(Mix.env)],
-     pool: [
-        path: "native/pool",
         mode: rustc_mode(Mix.env)]
     ]
   end

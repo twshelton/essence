@@ -16,14 +16,15 @@ defmodule Mix.Tasks.NewComponent do
 	  rust_methods: components |> String.split(",")
     ]
 
-    path = "native/" <> file <> "/src/"
+    path = "native/essence/src/api/" <> file
 
-    create_file(Path.join(path, "lib.rs1"), rust_template(bindings))
-    create_file(Path.join(path, "#{file}.ex1"), rust_elixir_template(bindings))
+    create_file(Path.join(path, "#{file}.rs1"), rust_template(bindings))
+    create_file(Path.join("lib/", "#{file}.ex1"), rust_elixir_template(bindings))
   end
+
   def component_to_nif(components) do
 	components
-	|> Enum.reduce([], fn(c, acc) -> ["(\"#{c}\", 1, #{c}),\n"] ++ acc end)
+	|> Enum.reduce([], fn(c, acc) -> ["(\"#{c}\", 1, indy_#{c}),\n"] ++ acc end)
   end
   def components_to_fn(components) do
 	components
@@ -38,7 +39,7 @@ defmodule Mix.Tasks.NewComponent do
 	end)
   end
   embed_template :rust_elixir_def, """
-    def <%= @name %> (handle), do: Indy.<%= @owner_module %>.<%= @name %>(handle)
+    def <%= @name %> (handle), do: Indy.<%= @name %>(handle)
   """
   embed_template :rust_elixir, """
 defmodule <%= @owner_module %> do
@@ -50,33 +51,16 @@ end
   
   """
   embed_template :rust, """
-#[macro_use] extern crate rustler;
-#[macro_use] extern crate rustler_codegen;
-#[macro_use] extern crate lazy_static;
-#[macro_use] extern crate serde_json;
-
-extern crate libc;
-extern crate indy;
-
-mod callbacks;
-mod utils;
-mod results;
 
 use libc::c_char;
 use std::ffi::CString;
 use indy::api::ErrorCode;
 use rustler::{Env, Term, NifResult, Encoder};
 use results::{result_to_string, result_to_int, result_to_empty};
+use utils::atoms;
+use utils::callbacks;
 use indy::api::<%= @owner_module %>::{<%= @components %>};
 
-mod atoms {
-    rustler_atoms! {
-        atom ok;
-        atom error;
-        //atom __true__ = "true";
-        //atom __false__ = "false";
-    }
-}
 
 rustler_export_nifs! {
     "Elixir.Indy.<%= @owner_module |> String.upcase %>" ,
@@ -91,6 +75,7 @@ rustler_export_nifs! {
   embed_template :rust_fn, """
 pub fn <%= @name %><'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {
 
+    /*
     let handle: i32 = try!(args[0].decode());
 
     let (receiver, command_handle, cb) = callbacks::_closure_to_cb_ec();
@@ -103,6 +88,8 @@ pub fn <%= @name %><'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> 
     };
 
     Ok(response.encode(env))
+    */
+    Ok((atoms::ok(), []).encode(env))
 }
 
   """

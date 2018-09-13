@@ -1,106 +1,47 @@
 #[macro_use] extern crate rustler;
+#[macro_use] extern crate rustler_codegen;
 #[macro_use] extern crate lazy_static;
+#[macro_use] extern crate serde_json;
 
 extern crate libc;
-
 extern crate indy;
 
-use rustler::{Env, Term, NifResult, Encoder};
-use std::sync::mpsc::{channel, Receiver};
-use std::ffi::CStr;
-use std::collections::HashMap;
-use std::sync::Mutex;
-use libc::c_char;
-use std::sync::atomic::{AtomicUsize, Ordering, ATOMIC_USIZE_INIT};
+mod utils;
+mod api;
 
-mod atoms {
-    rustler_atoms! {
-        atom ok;
-        //atom error;
-        //atom __true__ = "true";
-        //atom __false__ = "false";
-    }
-}
+use api::{pool, wallet, did};
 
 rustler_export_nifs! {
     "Elixir.Indy",
     [
-        ("list_pools", 0, list_pools),
-
+        ("list_pools", 0, pool::list_pools),
+        ("set_protocol_version", 1, pool::set_protocol_version),
+        ("open_default_pool_ledger", 1, pool::open_default_pool_ledger),
+        ("open_pool_ledger", 2, pool::open_pool_ledger),
+        ("refresh_pool_ledger", 1, pool::refresh_pool_ledger),
+        ("close_pool_ledger", 1, pool::close_pool_ledger),
+        ("create_pool_ledger_config", 2, pool::create_pool_ledger_config),
+        ("delete_pool_ledger_config", 1, pool::delete_pool_ledger_config),
+        ("import_wallet", 3, wallet::import_wallet),
+        ("export_wallet", 2, wallet::export_wallet),
+        ("delete_wallet", 2, wallet::delete_wallet),
+        ("close_wallet", 1, wallet::close_wallet),
+        ("open_wallet", 2, wallet::open_wallet),
+        ("create_wallet", 2, wallet::create_wallet),
+        ("abbreviate_verkey", 1, did::abbreviate_verkey),
+        ("list_my_dids_with_meta", 1, did::list_my_dids_with_meta),
+        ("get_my_did_with_meta", 2, did::get_my_did_with_meta),
+        ("set_did_metadata", 3, did::set_did_metadata),
+        ("replace_keys_apply", 2, did::replace_keys_apply),
+        ("replace_keys_start", 3, did::replace_keys_start),
+        ("create_and_store_my_did", 2, did::create_and_store_my_did),
+        ("store_their_did",2,did::store_their_did),
+        ("key_for_did",3,did::key_for_did),
+        ("key_for_local_did",2,did::key_for_local_did),
+        ("set_endpoint_for_did",4,did::set_endpoint_for_did),
+        ("get_endpoint_for_did",3,did::get_endpoint_for_did),
+        ("get_did_metadata",2,did::get_did_metadata),
     ],
     None
 }
 
-
-//mod pool {
-    fn list_pools<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {
-
-        let (receiver, command_handle, cb) = _closure_to_cb_ec_string();
-
-        let err = unsafe { indy::api::pool::indy_list_pools(command_handle, cb) };
-
-        let response = match result_to_string(err, receiver) {
-            Ok(resp) => resp,
-            _ => String::new(),
-        };
-
-        Ok((atoms::ok(), response).encode(env))
-    }
-//}
-
-fn result_to_string(err: indy::api::ErrorCode, receiver: Receiver<(indy::api::ErrorCode, String)>) -> Result<String, indy::api::ErrorCode> {
-    if err != indy::api::ErrorCode::Success {
-        return Err(err);
-    }
-
-    let (err, val) = receiver.recv().unwrap();
-
-    if err != indy::api::ErrorCode::Success {
-        return Err(err);
-    }
-
-    Ok(val)
-}
-
-fn _closure_to_cb_ec_string() -> (Receiver<(indy::api::ErrorCode, String)>, i32,
-                                      Option<extern fn(command_handle: i32,
-                                                       err: indy::api::ErrorCode,
-                                                       c_str: *const c_char)>) {
-    let (sender, receiver) = channel();
-
-    lazy_static! {
-        static ref CALLBACKS: Mutex < HashMap < i32, Box < FnMut(indy::api::ErrorCode, String) + Send > >> = Default::default();
-    }
-
-    let closure = Box::new(move |err, val| {
-        sender.send((err, val)).unwrap();
-    });
-
-    extern "C" fn _callback(command_handle: i32, err: indy::api::ErrorCode, c_str: *const c_char) {
-        let mut callbacks = CALLBACKS.lock().unwrap();
-        let mut cb = callbacks.remove(&command_handle).unwrap();
-        let metadata = unsafe { CStr::from_ptr(c_str).to_str().unwrap().to_string() };
-        cb(err, metadata)
-    }
-
-    let mut callbacks = CALLBACKS.lock().unwrap();
-    let command_handle = SequenceUtils::get_next_id();
-    callbacks.insert(command_handle, closure);
-
-    (receiver, command_handle, Some(_callback))
-}
-
-pub type IndyHandle = i32;
-
-
-pub struct SequenceUtils {}
-
-lazy_static! {
-    static ref IDS_COUNTER: AtomicUsize = ATOMIC_USIZE_INIT; //TODO use AtomicI32
-}
-
-impl SequenceUtils {
-    pub fn get_next_id() -> i32 {
-        (IDS_COUNTER.fetch_add(1, Ordering::SeqCst) + 1) as i32
-    }
-}
