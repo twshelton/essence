@@ -4,8 +4,7 @@ use rustler::{Env, Term, NifResult, Encoder};
 use utils::results::{result_to_string, result_to_empty, result_to_string_string};
 use utils::atoms;
 use utils::callbacks;
-use
-indy::api::did::{
+use indy::api::did::{
     indy_create_and_store_my_did,
     indy_replace_keys_start,
     indy_replace_keys_apply,
