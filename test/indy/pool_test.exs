@@ -6,7 +6,9 @@ defmodule Indy.PoolTest do
     assert return == :ok
   end
   test "set protocol to incorrect version" do
-    {return, _} = Indy.set_protocol_version(0)
+    {return, _} = 
+        Indy.set_protocol_version(0)
+        |> IO.inspect
     assert return == :error
   end
   test "create pool ledger config with default file" do

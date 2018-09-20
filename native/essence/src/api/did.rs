@@ -1,7 +1,6 @@
-
 use std::ffi::CString;
 use rustler::{Env, Term, NifResult, Encoder};
-use utils::results::{result_to_string, result_to_empty, result_to_string_string};
+use utils::ex_results::{result_to_string, result_to_empty, result_to_string_string};
 use utils::atoms;
 use utils::callbacks;
 use indy::api::did::{
@@ -30,10 +29,7 @@ pub fn create_and_store_my_did<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult
 
     let err = indy_create_and_store_my_did(command_handle, wallet_handle, c_did_json.as_ptr(), cb);
 
-    let response = match result_to_string_string(err, receiver) {
-      Ok((did, verkey)) => (atoms::ok(), format!("Success! {:?} {:?}", did, verkey)),
-      Err(err) => (atoms::error(), format!("{:?}", err)),
-    };
+    let response = result_to_string_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -50,10 +46,7 @@ pub fn replace_keys_start<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term
 
     let err = indy_replace_keys_start(command_handle, wallet_handle, c_did.as_ptr(), c_identity_json.as_ptr(), cb);
 
-    let response = match result_to_string(err, receiver) {
-        Ok(verkey) => (atoms::ok(), format!("Success! {:?}", verkey)),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -68,10 +61,7 @@ pub fn replace_keys_apply<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term
 
     let err = indy_replace_keys_apply(command_handle, wallet_handle, c_did.as_ptr(), cb);
 
-    let response = match result_to_empty(err, receiver) {
-        Ok(()) => (atoms::ok(), format!("Success!")),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_empty(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -88,10 +78,7 @@ pub fn set_did_metadata<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'
 
     let err = indy_set_did_metadata(command_handle, wallet_handle, c_did.as_ptr(), c_metadata.as_ptr(), cb);
 
-    let response = match result_to_empty(err, receiver) {
-        Ok(()) => (atoms::ok(), format!("Success!")),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_empty(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -106,10 +93,7 @@ pub fn get_did_metadata<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'
 
     let err = indy_get_did_metadata(command_handle, wallet_handle, c_did.as_ptr(), cb);
 
-    let response = match result_to_string(err, receiver) {
-        Ok(metadata) => (atoms::ok(), format!("Success! {:?}", metadata)),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -124,10 +108,7 @@ pub fn get_my_did_with_meta<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Te
 
     let err = indy_get_my_did_with_meta(command_handle, wallet_handle, c_did.as_ptr(), cb);
 
-    let response = match result_to_string(err, receiver) {
-        Ok(metadata) => (atoms::ok(), format!("Success! {:?}", metadata)),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -140,10 +121,7 @@ pub fn list_my_dids_with_meta<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<
 
     let err = indy_list_my_dids_with_meta(command_handle, wallet_handle, cb);
 
-    let response = match result_to_string(err, receiver) {
-        Ok(metadata) => (atoms::ok(), format!("Success! {:?}", metadata)),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -159,10 +137,7 @@ pub fn abbreviate_verkey<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<
 
     let err = indy_abbreviate_verkey(command_handle, c_did.as_ptr(), c_verkey.as_ptr(), cb);
 
-    let response = match result_to_string(err, receiver) {
-        Ok(verkey) => (atoms::ok(), format!("Success! {:?}", verkey)),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -178,10 +153,7 @@ pub fn get_endpoint_for_did<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Te
 
     let err = indy_get_endpoint_for_did(command_handle, wallet_handle, pool_handle, c_did.as_ptr(), cb);
 
-    let response = match result_to_string_string(err, receiver) {
-        Ok((address, transport_vk)) => (atoms::ok(), format!("Success! {:?} {:?}", address, transport_vk)),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_string_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -201,10 +173,7 @@ pub fn set_endpoint_for_did<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Te
     let err = indy_set_endpoint_for_did(command_handle, wallet_handle, c_did.as_ptr(), c_address.as_ptr(),
     c_transport_key.as_ptr(), cb);
 
-    let response = match result_to_empty(err, receiver) {
-        Ok(()) => (atoms::ok(), format!("Success!")),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_empty(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -220,10 +189,7 @@ pub fn key_for_did<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {
 
     let err = indy_key_for_did(command_handle, pool_handle, wallet_handle, c_did.as_ptr(), cb);
 
-    let response = match result_to_string(err, receiver) {
-        Ok(key) => (atoms::ok(), format!("Success! {:?}", key)),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -238,10 +204,7 @@ pub fn key_for_local_did<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<
 
     let err = indy_key_for_local_did(command_handle, wallet_handle, c_did.as_ptr(), cb);
 
-    let response = match result_to_string(err, receiver) {
-        Ok(key) => (atoms::ok(), format!("Success! {:?}", key)),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_string(err, receiver);
 
     Ok(response.encode(env))
 }
@@ -256,10 +219,7 @@ pub fn store_their_did<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a
 
     let err = indy_store_their_did(command_handle, wallet_handle, c_identity_json.as_ptr(), cb);
 
-    let response = match result_to_empty(err, receiver) {
-        Ok(()) => (atoms::ok(), format!("Success!")),
-        Err(err) => (atoms::error(), format!("There was a problem: {:?}", err)),
-    };
+    let response = result_to_empty(err, receiver);
 
     Ok(response.encode(env))
 }
