@@ -18,7 +18,9 @@ defmodule Indy.WalletTest do
     assert return == :ok
   end
   test "attempt to open non-existent wallet with config and credentials" do
-    {return, _} = Wallet.open(%Wallet.Config{id: "13"}, %Wallet.Credentials{key: "thasedrvj44oierglkerv'ijrijrgjerb"})
+    {return, _} = 
+        Wallet.open(%Wallet.Config{id: "13"}, %Wallet.Credentials{key: "thasedrvj44oierglkerv'ijrijrgjerb"})
+        |> IO.inspect
     assert return == :error
   end
   test "attempt to export wallet" do
