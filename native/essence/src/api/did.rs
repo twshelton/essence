@@ -1,7 +1,6 @@
 use std::ffi::CString;
 use rustler::{Env, Term, NifResult, Encoder};
 use utils::ex_results::{result_to_string, result_to_empty, result_to_string_string};
-use utils::atoms;
 use utils::callbacks;
 use indy::api::did::{
     indy_create_and_store_my_did,

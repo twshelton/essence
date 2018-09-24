@@ -4,7 +4,6 @@ use std::ptr;
 use std::ffi::CString;
 use rustler::{Env, Term, NifResult, Encoder};
 use utils::ex_results::{result_to_string, result_to_int, result_to_empty};
-use utils::atoms;
 use utils::callbacks;
 use indy::api::pool::{
     indy_close_pool_ledger, 
@@ -62,7 +61,6 @@ pub fn open_default_pool_ledger<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResul
     let config_name: String = try!(args[0].decode());
     let c_config_name = CString::new(config_name.to_string()).unwrap();
     let c_null: *const c_char = ptr::null();
-    let protocol_version: usize = 0;
 
     let (receiver, command_handle, cb) = callbacks::_closure_to_cb_ec_i32();
 
@@ -79,7 +77,6 @@ pub fn open_pool_ledger<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'
     let config: String = try!(args[1].decode());
     let c_config_name = CString::new(config_name.to_string()).unwrap();
     let c_config = CString::new(config).unwrap();
-    let protocol_version: usize = 0;
     let (receiver, command_handle, cb) = callbacks::_closure_to_cb_ec_i32();
 
     let err = indy_open_pool_ledger(command_handle, c_config_name.as_ptr(), c_config.as_ptr(), cb);

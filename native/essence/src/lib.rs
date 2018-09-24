@@ -9,7 +9,7 @@ extern crate indy;
 mod utils;
 mod api;
 
-use api::{pool, wallet, did};
+use api::{pool, wallet, did, ledger};
 
 rustler_export_nifs! {
     "Elixir.Indy",

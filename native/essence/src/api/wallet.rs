@@ -2,7 +2,6 @@ use std::ffi::CString;
 use rustler::{Env, Term, NifResult, Encoder};
 use utils::ex_results::{result_to_int, result_to_empty};
 use indy::api::wallet::{indy_create_wallet,indy_open_wallet,indy_close_wallet,indy_delete_wallet,indy_export_wallet,indy_import_wallet};
-use utils::atoms;
 use utils::callbacks;
 
 pub fn create_wallet<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {

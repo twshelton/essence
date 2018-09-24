@@ -1,3 +1,6 @@
+#
+priv/native/libessence.so
+
 # The directory Mix will write compiled artifacts to.
 /_build/
 
