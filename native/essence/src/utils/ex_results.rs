@@ -29,6 +29,19 @@ pub fn result_to_int(err: ErrorCode, receiver: Receiver<(ErrorCode, i32)>) -> Re
 
     Ok(val)
 }
+pub fn result_to_bool(err: ErrorCode, receiver: Receiver<(ErrorCode, bool)>) -> Result<bool, String> {
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    let (err, val) = receiver.recv().unwrap();
+
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    Ok(val)
+}
 
 pub fn result_to_string(err: ErrorCode, receiver: Receiver<(ErrorCode, String)>) -> Result<String, String> {
     if err != ErrorCode::Success {

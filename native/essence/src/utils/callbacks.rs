@@ -36,6 +36,7 @@ pub fn _closure_to_cb_ec() -> (Receiver<ErrorCode>, i32,
     (receiver, command_handle, Some(_callback))
 }
 
+
 pub fn _closure_to_cb_ec_i32() -> (Receiver<(ErrorCode, i32)>, i32,
                                    Option<extern fn(command_handle: i32, err: ErrorCode,
                                                     c_i32: i32)>) {
@@ -62,6 +63,31 @@ pub fn _closure_to_cb_ec_i32() -> (Receiver<(ErrorCode, i32)>, i32,
     (receiver, command_handle, Some(_callback))
 }
 
+pub fn _closure_to_cb_ec_bool() -> (Receiver<(ErrorCode, bool)>, i32,
+                                   Option<extern fn(command_handle: i32, err: ErrorCode,
+                                                    c_bool: bool)>) {
+    let (sender, receiver) = channel();
+
+    lazy_static! {
+        static ref CALLBACKS: Mutex<HashMap<i32, Box<FnMut(ErrorCode, bool) + Send>>> = Default::default();
+    }
+
+    let closure = Box::new(move |err, val| {
+        sender.send((err, val)).unwrap();
+    });
+
+    extern "C" fn _callback(command_handle: i32, err: ErrorCode, c_bool: bool) {
+        let mut callbacks = CALLBACKS.lock().unwrap();
+        let mut cb = callbacks.remove(&command_handle).unwrap();
+        cb(err, c_bool)
+    }
+
+    let mut callbacks = CALLBACKS.lock().unwrap();
+    let command_handle = SequenceUtils::get_next_id();
+    callbacks.insert(command_handle, closure);
+
+    (receiver, command_handle, Some(_callback))
+}
 pub fn _closure_to_cb_ec_string() -> (Receiver<(ErrorCode, String)>, i32,
                                       Option<extern fn(command_handle: i32,
                                                        err: ErrorCode,

@@ -9,7 +9,14 @@ extern crate indy;
 mod utils;
 mod api;
 
-use api::{pool, wallet, did, ledger};
+use api::{
+    pool, 
+    wallet, 
+    did, 
+    ledger,
+    pairwise,
+    payments
+    };
 
 rustler_export_nifs! {
     "Elixir.Indy",
@@ -70,7 +77,27 @@ rustler_export_nifs! {
         ("build_get_revoc_reg_request",3,ledger::build_get_revoc_reg_request), 
         ("parse_get_revoc_reg_response",1,ledger::parse_get_revoc_reg_response), 
         ("build_get_revoc_reg_delta_request",4,ledger::build_get_revoc_reg_delta_request), 
-        ("parse_get_revoc_reg_delta_response",1,ledger::parse_get_revoc_reg_delta_response)
+        ("parse_get_revoc_reg_delta_response",1,ledger::parse_get_revoc_reg_delta_response),
+        ("is_pairwise_exists",2,pairwise::is_pairwise_exists), 
+        ("create_pairwise",4,pairwise::create_pairwise), 
+        ("list_pairwise",1,pairwise::list_pairwise), 
+        ("get_pairwise",2,pairwise::get_pairwise), 
+        ("set_pairwise_metadata",3,pairwise::set_pairwise_metadata), 
+        ("register_payment_method",14,payments::register_payment_method), 
+        ("create_payment_address",3,payments::create_payment_address), 
+        ("list_payment_addresses",1,payments::list_payment_addresses), 
+        ("add_request_fees",6,payments::add_request_fees), 
+        ("parse_response_with_fees",2,payments::parse_response_with_fees), 
+        ("build_get_payment_sources_request",3,payments::build_get_payment_sources_request), 
+        ("parse_get_payment_sources_response",2,payments::parse_get_payment_sources_response), 
+        ("build_payment_req",5,payments::build_payment_req), 
+        ("parse_payment_response",2,payments::parse_payment_response), 
+        ("build_mint_req",4,payments::build_mint_req), 
+        ("build_set_txn_fees_req",4,payments::build_set_txn_fees_req), 
+        ("build_get_txn_fees_req",3,payments::build_get_txn_fees_req), 
+        ("parse_get_txn_fees_response",2,payments::parse_get_txn_fees_response), 
+        ("build_verify_payment_req",3,payments::build_verify_payment_req), 
+        ("parse_verify_payment_response",2,payments::parse_verify_payment_response)
     ],
     None
 }

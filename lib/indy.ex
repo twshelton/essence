@@ -66,5 +66,29 @@ defmodule Indy do
     def build_get_revoc_reg_delta_request(submitter_did,revoc_reg_def_id,from,to), do: nif_error()
     def parse_get_revoc_reg_delta_response(get_revoc_reg_delta_response), do: nif_error()
 
+    #Pairwise definitions
+    def is_pairwise_exists(wallet_handle,their_did), do: nif_error()
+    def create_pairwise(wallet_handle,their_did,my_did,metadata), do: nif_error()
+    def list_pairwise(wallet_handle), do: nif_error()
+    def get_pairwise(wallet_handle,their_did), do: nif_error()
+    def set_pairwise_metadata(wallet_handle,their_did,metadata), do: nif_error()
+
+    #Payments definitions
+    def register_payment_method(payment_method,create_payment_address,add_request_fees,parse_response_with_fees,build_get_payment_sources_request,parse_get_payment_sources_response,build_payment_req,parse_payment_response,build_mint_req,build_set_txn_fees_req,build_get_txn_fees_req,parse_get_txn_fees_response,build_verify_payment_req,parse_verify_payment_response), do: nif_error()
+    def create_payment_address(wallet_handle,payment_method,config), do: nif_error()
+    def list_payment_addresses(wallet_handle), do: nif_error()
+    def add_request_fees(wallet_handle,submitter_did,req_json,inputs_json,outputs_json,extra), do: nif_error()
+    def parse_response_with_fees(payment_method,resp_json), do: nif_error()
+    def build_get_payment_sources_request(wallet_handle,submitter_did,payment_address), do: nif_error()
+    def parse_get_payment_sources_response(payment_method,resp_json), do: nif_error()
+    def build_payment_req(wallet_handle,submitter_did,inputs_json,outputs_json,extra), do: nif_error()
+    def parse_payment_response(payment_method,resp_json), do: nif_error()
+    def build_mint_req(wallet_handle,submitter_did,outputs_json,extra), do: nif_error()
+    def build_set_txn_fees_req(wallet_handle,submitter_did,payment_method,fees_json), do: nif_error()
+    def build_get_txn_fees_req(wallet_handle,submitter_did,payment_method), do: nif_error()
+    def parse_get_txn_fees_response(payment_method,resp_json), do: nif_error()
+    def build_verify_payment_req(wallet_handle,submitter_did,receipt), do: nif_error()
+    def parse_verify_payment_response(payment_method,resp_json), do: nif_error()
+  
     def nif_error, do: :erlang.nif_error(:nif_not_loaded)
 end
