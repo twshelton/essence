@@ -15,7 +15,8 @@ use api::{
     did, 
     ledger,
     pairwise,
-    payments
+    payments,
+    non_secrets
     };
 
 rustler_export_nifs! {
@@ -97,7 +98,17 @@ rustler_export_nifs! {
         ("build_get_txn_fees_req",3,payments::build_get_txn_fees_req), 
         ("parse_get_txn_fees_response",2,payments::parse_get_txn_fees_response), 
         ("build_verify_payment_req",3,payments::build_verify_payment_req), 
-        ("parse_verify_payment_response",2,payments::parse_verify_payment_response)
+        ("parse_verify_payment_response",2,payments::parse_verify_payment_response),
+        ("add_wallet_record",5,non_secrets::add_wallet_record), 
+        ("update_wallet_record_value",4,non_secrets::update_wallet_record_value), 
+        ("update_wallet_record_tags",4,non_secrets::update_wallet_record_tags), 
+        ("add_wallet_record_tags",4,non_secrets::add_wallet_record_tags), 
+        ("delete_wallet_record_tags",4,non_secrets::delete_wallet_record_tags), 
+        ("delete_wallet_record",3,non_secrets::delete_wallet_record), 
+        ("get_wallet_record",4,non_secrets::get_wallet_record), 
+        ("open_wallet_search",4,non_secrets::open_wallet_search), 
+        ("fetch_wallet_search_next_records",3,non_secrets::fetch_wallet_search_next_records), 
+        ("close_wallet_search",1,non_secrets::close_wallet_search), 
     ],
     None
 }

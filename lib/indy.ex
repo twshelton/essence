@@ -90,5 +90,17 @@ defmodule Indy do
     def build_verify_payment_req(wallet_handle,submitter_did,receipt), do: nif_error()
     def parse_verify_payment_response(payment_method,resp_json), do: nif_error()
   
+    #NonSecrets definitions
+    def add_wallet_record(wallet_handle,type_,id,value,tags_json), do: nif_error()
+    def update_wallet_record_value(wallet_handle,type_,id,value), do: nif_error()
+    def update_wallet_record_tags(wallet_handle,type_,id,tags_json), do: nif_error()
+    def add_wallet_record_tags(wallet_handle,type_,id,tags_json), do: nif_error()
+    def delete_wallet_record_tags(wallet_handle,type_,id,tag_names_json), do: nif_error()
+    def delete_wallet_record(wallet_handle,type_,id), do: nif_error()
+    def get_wallet_record(wallet_handle,type_,id,options_json), do: nif_error()
+    def open_wallet_search(wallet_handle,type_,query_json,options_json), do: nif_error()
+    def fetch_wallet_search_next_records(wallet_handle,wallet_search_handle,count), do: nif_error()
+    def close_wallet_search(wallet_search_handle), do: nif_error()
+
     def nif_error, do: :erlang.nif_error(:nif_not_loaded)
 end

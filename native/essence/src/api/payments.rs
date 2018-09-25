@@ -20,6 +20,7 @@ indy_parse_verify_payment_response};
 
 pub fn register_payment_method<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {
 /*
+   TODO: fix this one ... requires more work for the Option arguments
    let payment_method: String = try!(args[0].decode()); 
    let c_payment_method = CString::new(payment_method).unwrap();
    Dont know what to do with this: OptionCreatePaymentAddressCB
