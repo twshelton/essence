@@ -1,4 +1,3 @@
-use libc::c_char;
 use std::ffi::CString;
 use rustler::{Env, Term, NifResult, Encoder};
 use utils::ex_results::{result_to_string, result_to_int, result_to_empty};

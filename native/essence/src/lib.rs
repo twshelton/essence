@@ -16,7 +16,8 @@ use api::{
     ledger,
     pairwise,
     payments,
-    non_secrets
+    non_secrets,
+    anoncreds
     };
 
 rustler_export_nifs! {
@@ -109,6 +110,27 @@ rustler_export_nifs! {
         ("open_wallet_search",4,non_secrets::open_wallet_search), 
         ("fetch_wallet_search_next_records",3,non_secrets::fetch_wallet_search_next_records), 
         ("close_wallet_search",1,non_secrets::close_wallet_search), 
+        ("issuer_create_schema",4,anoncreds::issuer_create_schema), 
+        ("issuer_create_and_store_credential_def",6,anoncreds::issuer_create_and_store_credential_def), 
+        ("issuer_create_and_store_revoc_reg",7,anoncreds::issuer_create_and_store_revoc_reg), 
+        ("issuer_create_credential_offer",2,anoncreds::issuer_create_credential_offer), 
+        ("issuer_create_credential",6,anoncreds::issuer_create_credential), 
+        ("issuer_revoke_credential",4,anoncreds::issuer_revoke_credential), 
+        ("issuer_merge_revocation_registry_deltas",2,anoncreds::issuer_merge_revocation_registry_deltas), 
+        ("prover_create_master_secret",2,anoncreds::prover_create_master_secret), 
+        ("prover_create_credential_req",5,anoncreds::prover_create_credential_req), 
+        ("prover_store_credential",6,anoncreds::prover_store_credential), 
+        ("prover_get_credential",2,anoncreds::prover_get_credential), 
+        ("prover_search_credentials",2,anoncreds::prover_search_credentials), 
+        ("prover_fetch_credentials",2,anoncreds::prover_fetch_credentials), 
+        ("prover_close_credentials_search",1,anoncreds::prover_close_credentials_search), 
+        ("prover_search_credentials_for_proof_req",3,anoncreds::prover_search_credentials_for_proof_req), 
+        ("prover_fetch_credentials_for_proof_req",3,anoncreds::prover_fetch_credentials_for_proof_req), 
+        ("prover_close_credentials_search_for_proof_req",1,anoncreds::prover_close_credentials_search_for_proof_req), 
+        ("prover_create_proof",7,anoncreds::prover_create_proof), 
+        ("verifier_verify_proof",6,anoncreds::verifier_verify_proof), 
+        ("create_revocation_state",5,anoncreds::create_revocation_state), 
+        ("update_revocation_state",6,anoncreds::update_revocation_state), 
     ],
     None
 }

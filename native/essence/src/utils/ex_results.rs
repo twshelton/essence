@@ -83,3 +83,32 @@ pub fn result_to_string_string_timestamp(err: ErrorCode, receiver: Receiver<(Err
 
     Ok((val, val2, ts))
 }
+
+pub fn result_to_handle_count(err: ErrorCode, receiver: Receiver<(ErrorCode, i32, usize)>) -> Result<(i32,usize), String> {
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    let (err, val, val2) = receiver.recv().unwrap();
+
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    Ok((val, val2))
+}
+
+pub fn result_to_string_string_string(err: ErrorCode, receiver: Receiver<(ErrorCode, String, String, String)>) ->
+Result<(String, String, String), String> {
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    let (err, val, val2, val3) = receiver.recv().unwrap();
+
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    Ok((val, val2, val3))
+}
