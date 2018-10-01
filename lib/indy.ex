@@ -126,5 +126,16 @@ defmodule Indy do
     def update_revocation_state(_blob_storage_reader_handle,_rev_state_json,_rev_reg_def_json,_rev_reg_delta_json,_timestamp,_cred_rev_id), do: nif_error()
 
   
+    #Crypto definitions
+    def create_key(_wallet_handle,_key_json), do: nif_error()
+    def set_key_metadata(_wallet_handle,_verkey,_metadata), do: nif_error()
+    def get_key_metadata(_wallet_handle,_verkey), do: nif_error()
+    def crypto_sign(_wallet_handle,_signer_vk,_message_raw,_message_len), do: nif_error()
+    def crypto_verify(_signer_vk,_message_raw,_message_len,_signature_raw,_signature_len), do: nif_error()
+    def crypto_auth_crypt(_wallet_handle,_sender_vk,_recipient_vk,_msg_data,_msg_len), do: nif_error()
+    def crypto_auth_decrypt(_wallet_handle,_recipient_vk,_encrypted_msg,_encrypted_len), do: nif_error()
+    def crypto_anon_crypt(_recipient_vk,_msg_data,_msg_len), do: nif_error()
+    def crypto_anon_decrypt(_wallet_handle,_recipient_vk,_encrypted_msg,_encrypted_len), do: nif_error()
+  
     def nif_error, do: :erlang.nif_error(:nif_not_loaded)
 end

@@ -112,3 +112,32 @@ Result<(String, String, String), String> {
 
     Ok((val, val2, val3))
 }
+
+pub fn result_to_msg_msglen(err: ErrorCode, receiver: Receiver<(ErrorCode, String, u32)>) -> Result<(String, u32), String> {
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    let (err, val, val2) = receiver.recv().unwrap();
+
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    Ok((val, val2))
+}
+pub fn result_to_sender_msg_msglen(err: ErrorCode, receiver: Receiver<(ErrorCode, String, String, u32)>) -> Result<(String, String, u32), String> {
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    let (err, val, val2, val3) = receiver.recv().unwrap();
+
+    if err != ErrorCode::Success {
+        return Err(format!("{:?}", err));
+    }
+
+    Ok((val, val2, val3))
+}
+
+

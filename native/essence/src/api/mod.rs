@@ -6,3 +6,4 @@ pub mod pairwise;
 pub mod payments;
 pub mod non_secrets;
 pub mod anoncreds;
+pub mod crypto;
