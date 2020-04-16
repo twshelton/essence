@@ -15,4 +15,6 @@ lazy_static = "1.0"
 libc = "0.2"
 serde_json = "1.0.26"
 indy = { path = "/home/ubuntu/indy-sdk/libindy/" }
+vcx = { path = "/home/ubuntu/indy-sdk/vcx/libvcx/" }
+nullpay = { path = "/home/ubuntu/indy-sdk/libnullpay/" }
 bytes = "0.4.10"

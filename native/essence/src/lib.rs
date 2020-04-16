@@ -1,5 +1,5 @@
 #[macro_use] extern crate rustler;
-#[macro_use] extern crate rustler_codegen;
+//#[macro_use] extern crate rustler_codegen;
 #[macro_use] extern crate lazy_static;
 #[macro_use] extern crate serde_json;
 
@@ -18,8 +18,7 @@ use api::{
     pairwise,
     payments,
     non_secrets,
-    anoncreds,
-    crypto
+    anoncreds
     };
 
 rustler_export_nifs! {
@@ -132,16 +131,16 @@ rustler_export_nifs! {
         ("prover_create_proof",7,anoncreds::prover_create_proof), 
         ("verifier_verify_proof",6,anoncreds::verifier_verify_proof), 
         ("create_revocation_state",5,anoncreds::create_revocation_state), 
-        ("update_revocation_state",6,anoncreds::update_revocation_state), 
-        ("create_key",2,crypto::create_key), 
-        ("set_key_metadata",3,crypto::set_key_metadata), 
-        ("get_key_metadata",2,crypto::get_key_metadata), 
-        ("crypto_sign",4,crypto::crypto_sign), 
-        ("crypto_verify",5,crypto::crypto_verify), 
-        ("crypto_auth_crypt",5,crypto::crypto_auth_crypt), 
-        ("crypto_auth_decrypt",4,crypto::crypto_auth_decrypt), 
-        ("crypto_anon_crypt",3,crypto::crypto_anon_crypt), 
-        ("crypto_anon_decrypt",4,crypto::crypto_anon_decrypt), 
+        ("update_revocation_state",6,anoncreds::update_revocation_state)
+        //("create_key",2,crypto::create_key), 
+        //("set_key_metadata",3,crypto::set_key_metadata), 
+        //("get_key_metadata",2,crypto::get_key_metadata), 
+        //("crypto_sign",4,crypto::crypto_sign), 
+        //("crypto_verify",5,crypto::crypto_verify), 
+        //("crypto_auth_crypt",5,crypto::crypto_auth_crypt), 
+        //("crypto_auth_decrypt",4,crypto::crypto_auth_decrypt), 
+        //("crypto_anon_crypt",3,crypto::crypto_anon_crypt), 
+        //("crypto_anon_decrypt",4,crypto::crypto_anon_decrypt), 
 
     ],
     None
